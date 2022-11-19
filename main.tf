@@ -1,3 +1,10 @@
+# Ensuring that the cloud run api is enabled.
+resource "google_project_service" "sql_admin_api" {
+  service = "run.googleapis.com"
+  project = var.project
+  disable_on_destroy = false
+}
+
 resource "google_service_account" "cloud_run_service_account" {
   account_id = var.service_account_name
   description = "Service accounts used by the Cloud Run Services and Jobs that host the dragondrop.cloud service."
@@ -29,7 +36,7 @@ resource "google_cloud_run_service" "https_job_trigger" {
 
                env {
                  name = "JOB_NAME"
-                 value = ""
+                 value = var.dragondrop_engine_cloud_run_job_name
                }
 
                ports {
