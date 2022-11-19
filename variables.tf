@@ -9,12 +9,17 @@ variable "project" {
 }
 
 variable "cloud_run_max_instances" {
-  description = "Maximum number of cloud run instances to be scaled up to handle incoming requests. This value should be set to at most 2."
+  description = "Maximum number of Cloud Run instances to be scaled up to handle incoming requests. This value should be set to at most 2."
+  type = string
+}
+
+variable "dragondrop_engine_cloud_run_job_name" {
+  description = "Name of the Cloud Run Job that hosts the dragondrop compute engine."
   type = string
 }
 
 variable "https_trigger_cloud_run_service_name" {
-  description = "Name of the https trigger cloud run service that will trigger the dragondrop 'engine' hosted in a cloud run job."
+  description = "Name of the https trigger Cloud Run service that will trigger the dragondrop 'engine' hosted in a cloud run job."
   type = string
 }
 
