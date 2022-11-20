@@ -39,6 +39,11 @@ resource "google_cloud_run_service" "https_job_trigger" {
                  value = var.dragondrop_engine_cloud_run_job_name
                }
 
+               env {
+                 name = "JOB_REGION"
+                 value = var.region
+               }
+
                ports {
                    container_port = 5000
                }
