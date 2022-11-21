@@ -11,9 +11,17 @@ resource "google_service_account" "cloud_run_service_account" {
   project = var.project
 }
 
+// Custom role for the service account, the minimum amount needed to update and invoke jobs
+resource "google_project_iam_custom_role" "dragondrop-https-trigger-role" {
+  role_id     = "dragondropHTTPSTriggerRole"
+  title       = "dragondrop HTTPS Trigger Role"
+  description = "Role for the dragondrop https trigger to update and invoke Cloud Run Jobs."
+  permissions = ["run.routes.invoke", "run.services.update", "run.services.get"]
+}
+
 resource "google_project_iam_member" "cloud_run_invoker" {
   project = var.project
-  role   = "roles/run.invoker"
+  role   = google_project_iam_custom_role.dragondrop-https-trigger-role.id
   member = "serviceAccount:${google_service_account.cloud_run_service_account.email}"
 }
 
