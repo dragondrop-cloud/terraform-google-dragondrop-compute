@@ -16,6 +16,7 @@ module "division_to_provider" {
 
 ## Defining the secrets needed for Environment variables of the Cloud Run Job
 resource "google_cloud_run_v2_job" "dragondrop-engine" {
+   provider = google-beta
    name = var.cloud_run_job_name
    location = var.region
    project = var.project
