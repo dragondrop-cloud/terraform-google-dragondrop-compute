@@ -15,6 +15,6 @@ resource "google_secret_manager_secret_iam_member" "secret_access" {
   project = var.project
   secret_id = google_secret_manager_secret.secret.secret_id
   role = "roles/secretmanager.secretAccessor"
-  member = var.dragondrop_compute_service_account
+  member = "serviceAccount:${var.dragondrop_compute_service_account}"
   depends_on = [google_secret_manager_secret.secret]
 }
