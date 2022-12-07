@@ -20,6 +20,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
    name = var.cloud_run_job_name
    location = var.region
    project = var.project
+   launch_stage = "BETA"
 
    template {
       template {
