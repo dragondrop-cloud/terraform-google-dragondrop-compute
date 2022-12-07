@@ -29,7 +29,7 @@ resource "google_cloud_run_v2_job" "default" {
   }
 }
 
-resource "google_cloud_run_v2_job" "default" {
+resource "google_cloud_run_v2_job" "default-two" {
   name     = "cloudrun-job"
   location = "us-central1"
   launch_stage = "BETA"
