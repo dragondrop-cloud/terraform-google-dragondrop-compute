@@ -29,7 +29,7 @@ resource "google_project_iam_member" "cloud_run_invoker" {
 
 // TODO: Module for google_cloud_run_v2_job
 module "cloud_run_job" {
-  source = "modules/cloud_run_job"
+  source = "./modules/cloud_run_job"
 
   project = var.project
   region = var.region
