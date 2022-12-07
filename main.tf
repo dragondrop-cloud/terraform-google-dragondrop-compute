@@ -20,12 +20,24 @@ resource "google_project_iam_custom_role" "dragondrop-https-trigger-role" {
   permissions = ["iam.serviceAccounts.actAs", "run.executions.get", "run.jobs.get", "run.jobs.run", "run.jobs.update"]
 }
 
+// Once supported by Terraform, can make this a member only of the cloud run job, until then, this quite restrictive
 resource "google_project_iam_member" "cloud_run_invoker" {
   project = var.project
   role    = google_project_iam_custom_role.dragondrop-https-trigger-role.id
   member  = "serviceAccount:${google_service_account.cloud_run_service_account.email}"
 }
 
+// TODO: Module for google_cloud_run_v2_job
+module "cloud_run_job" {
+  source = "/modules/cloud_run_job"
+
+  project = var.project
+  region = var.region
+  cloud_run_job_name = var.dragondrop_engine_cloud_run_job_name
+  dragondrop_compute_service_account_email = google_service_account.cloud_run_service_account.email
+}
+
+// TODO: This will potentially become its own module for cleanliness
 resource "google_cloud_run_service" "https_job_trigger" {
     name                       = var.https_trigger_cloud_run_service_name
     location                   = var.region
