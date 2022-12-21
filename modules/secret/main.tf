@@ -11,6 +11,11 @@ resource "google_secret_manager_secret" "secret" {
   }
 }
 
+resource "google_secret_manager_secret_version" "secret-version-data" {
+  secret      = google_secret_manager_secret.secret.name
+  secret_data = "placeholder-value-for-initial-provisioning"
+}
+
 resource "google_secret_manager_secret_iam_member" "secret_access" {
   project    = var.project_name
   secret_id  = google_secret_manager_secret.secret.secret_id
