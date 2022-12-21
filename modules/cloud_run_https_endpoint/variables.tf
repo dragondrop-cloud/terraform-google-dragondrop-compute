@@ -18,17 +18,12 @@ variable "dragondrop_engine_cloud_run_job_name" {
   type        = string
 }
 
-variable "dragondrop_engine_container_path" {
-  description = "Path to the dragondrop engine container used in the cloud run job."
-  type        = string
-}
-
 variable "https_trigger_cloud_run_service_name" {
   description = "Name of the https trigger Cloud Run service that will trigger the dragondrop 'engine' hosted in a cloud run job."
   type        = string
 }
 
-variable "service_account_name" {
-  description = "Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job."
+variable "service_account_email" {
+  description = "Email of the service account with exclusively Cloud Run Job update and invocation privileges that servesas the service account for the HTTPS trigger Cloud Run Job."
   type        = string
 }
