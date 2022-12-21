@@ -1,19 +1,25 @@
 # dragondrop Self-Hosting Compute
-Terraform code for deploying the compute services needed to run dragondrop.cloud within your cloud.
+Terraform code for deploying the compute resources needed to run dragondrop.cloud within your Google Cloud environment.
 
 ## How to Use this Module
 This module defines the compute resources needed to run dragondrop within your own cloud environment.
 
 It defines a [Cloud Run Service](https://github.com/dragondrop-cloud/cloud-run-job-http-trigger) that can
-evoke the longer running dragondrop engine living in a Cloud Run Job. The url for this Cloud Run Service
-is output and should be passed to a dragondrop [Job](https://docs.dragondrop.cloud/product-docs/getting-started/creating-a-job)
-definition. 
+evoke the longer running dragondrop engine living in a provisioned Cloud Run Job.
 
-### Limitations
-Currently, the GCP provider [does not support](https://github.com/hashicorp/terraform-provider-google/issues/11743)
- Cloud Run Jobs, so users will need to manually create their own Cloud Run Job instance to host the dragondrop core engine.
+The url for this Cloud Run Service is output and should be passed to a dragondrop [Job](https://docs.dragondrop.cloud/product-docs/getting-started/creating-a-job)
+definition as that Job's "HTTPS Url".
 
-As soon as the GCP provider implements this functionality, we will release a new version of this module.
+The Cloud Run Job hosts dragondrop's proprietary container. All environment variables that need to be configured are references
+to secrets within Google Secret Manager, and can be customized like any other secret.
+
+### Security When Using This Module
+This module creates a new IAM role, "dragondrop HTTPS Trigger Role" which has the minimum permissions needed to evoke
+Cloud Run Jobs. This role is assigned to a new service account, and that service account is the service account used by both the
+Cloud Run Service and Cloud Run Job provisioned by this module.
+
+Lastly, that service account is granted Secret Accessor privileges on only the secrets referenced by the Cloud Run Job as
+environment variables.
 
 ## What is dragondrop.cloud?
 [dragondrop.cloud](https://dragondrop.cloud) is a provider of IAC automation solutions that are self-hosted

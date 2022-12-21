@@ -1,6 +1,6 @@
 module "dragondrop_compute" {
   source  = "app.terraform.io/dragondrop-cloud/dragondrop-compute/google"
-  version = "0.2.0"
+  version = "0.4.3"
 
   project = "my-gcp-project"
   region  = "us-east4"
