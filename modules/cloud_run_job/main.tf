@@ -153,15 +153,6 @@ module "job_token" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "job_id" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "JOBID"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 # Defining the secrets needed for Environment variables of the Cloud Run Job
 resource "google_cloud_run_v2_job" "dragondrop-engine" {
   provider     = google
@@ -340,13 +331,8 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.job_id.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.job_id.secret_id
-              version = "latest"
-            }
-          }
+          name  = "DRAGONDROP_JOBID"
+          value = ""
         }
 
         resources {
