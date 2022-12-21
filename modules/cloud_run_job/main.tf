@@ -349,7 +349,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
     module.terraform_version, module.relative_directory_markdown, module.workspace_to_directory,
     module.migration_history_storage, module.vcs_token, module.vcs_user, module.vcs_repo,
     module.vcs_system, module.vcs_base_branch, module.state_backend, module.terraform_cloud_organization,
-    module.terraform_cloud_token, module.job_token, module.job_id
+    module.terraform_cloud_token, module.job_token
   ]
 }
 
