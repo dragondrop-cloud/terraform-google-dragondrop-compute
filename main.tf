@@ -20,92 +20,33 @@ resource "google_project_iam_custom_role" "dragondrop-https-trigger-role" {
   permissions = ["iam.serviceAccounts.actAs", "run.executions.get", "run.jobs.get", "run.jobs.run", "run.jobs.update"]
 }
 
-// Once supported by Terraform, can make this a member only of the cloud run job, until then, this quite restrictive
+// Once supported by Terraform, can make this a member only of the cloud run job, until then, this as restrictive
+// as can be while still controlled by Terraform.
 resource "google_project_iam_member" "cloud_run_invoker" {
   project = var.project
   role    = google_project_iam_custom_role.dragondrop-https-trigger-role.id
   member  = "serviceAccount:${google_service_account.cloud_run_service_account.email}"
 }
 
-// TODO: Module for google_cloud_run_v2_job
+
 module "cloud_run_job" {
   source = "./modules/cloud_run_job"
 
-  project = var.project
-  region = var.region
-  cloud_run_job_name = var.dragondrop_engine_cloud_run_job_name
+  project                                  = var.project
+  region                                   = var.region
+  cloud_run_job_name                       = var.dragondrop_engine_cloud_run_job_name
   dragondrop_compute_service_account_email = google_service_account.cloud_run_service_account.email
+  dragondrop_engine_container_path         = var.dragondrop_engine_container_path
 }
 
-// TODO: This will potentially become its own module for cleanliness
-resource "google_cloud_run_service" "https_job_trigger" {
-    name                       = var.https_trigger_cloud_run_service_name
-    location                   = var.region
-    project                    = var.project
-    autogenerate_revision_name = true
+module "cloud_run_https_endpoint" {
+  source = "./modules/cloud_run_https_endpoint"
 
-    template {
+  project = var.project
+  region  = var.region
 
-       spec {
-
-             service_account_name = google_service_account.cloud_run_service_account.email
-
-             containers {
-               # This image's is open sourced and available for inspection at:
-               # https://github.com/dragondrop-cloud/cloud-run-job-http-trigger
-               image = "us-east4-docker.pkg.dev/dragondrop-dev/dragondrop-https-triggers/cloud-run-service:latest"
-
-               env {
-                 name  = "JOB_NAME"
-                 value = var.dragondrop_engine_cloud_run_job_name
-               }
-
-               env {
-                 name  = "JOB_REGION"
-                 value = var.region
-               }
-
-               ports {
-                   container_port = 5000
-               }
-
-               resources {
-                   // The memory requirements for the hosted image are very small.
-                   // these resource specifications should be more than sufficient.
-                   requests = {
-                      memory = "400M"
-                      cpu    = "1000m"
-                   }
-
-                   limits = {
-                     memory = "1000M"
-                     cpu    = "2000m"
-                   }
-               }
-
-             }
-       }
-
-    metadata {
-      annotations = {
-        "autoscaling.knative.dev/minScale" = "0"
-        "autoscaling.knative.dev/maxScale" = var.cloud_run_max_instances
-      }
-    }
-    }
-
-    traffic {
-        percent = 100
-        latest_revision = true
-    }
-}
-
-# Allow external IP addresses to invoke the HTTPS trigger service
-resource "google_cloud_run_service_iam_member" "accessible_trigger" {
-  location = google_cloud_run_service.https_job_trigger.location
-  project = google_cloud_run_service.https_job_trigger.project
-  service = google_cloud_run_service.https_job_trigger.name
-
-  role = "roles/run.invoker"
-  member = "allUsers"
+  cloud_run_max_instances              = var.cloud_run_max_instances
+  dragondrop_engine_cloud_run_job_name = var.dragondrop_engine_cloud_run_job_name
+  https_trigger_cloud_run_service_name = var.https_trigger_cloud_run_service_name
+  service_account_email                = google_service_account.cloud_run_service_account.email
 }
