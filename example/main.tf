@@ -8,6 +8,5 @@ module "dragondrop_compute" {
   cloud_run_max_instances              = "2"
   https_trigger_cloud_run_service_name = "dragondrop-https-trigger"
   dragondrop_engine_cloud_run_job_name = "dragondrop-job-name"
-  dragondrop_engine_container_path     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-engine/engine@latest"
   service_account_name                 = "dragondrop-compute"
 }

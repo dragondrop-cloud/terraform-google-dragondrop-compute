@@ -1,6 +1,6 @@
 variable "project" {
   description = "Project name for the cloud run job."
-  type        = number
+  type        = string
 }
 
 variable "region" {
