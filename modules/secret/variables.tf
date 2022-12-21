@@ -1,5 +1,10 @@
-variable "project" {
-  description = "Project name for the secret's project."
+variable "project_name" {
+  description = "Project name of the corresponding project."
+  type        = string
+}
+
+variable "project_number" {
+  description = "Project number of the secret's project."
   type        = number
 }
 

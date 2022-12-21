@@ -4,7 +4,7 @@ variable "region" {
 }
 
 variable "project" {
-  description = "GCP project into which resources will be deployed."
+  description = "GCP project name into which resources will be deployed."
   type        = string
 }
 
