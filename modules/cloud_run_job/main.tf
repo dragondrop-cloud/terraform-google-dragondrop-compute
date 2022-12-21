@@ -15,7 +15,7 @@ module "division_to_provider" {
   project_name                       = var.project
   project_number                     = data.google_project.project.number
   secret_id                          = "DIVISIONTOPROVIDER"
-  dragondrop_compute_service_account = var.dragondrop_compute_service_account_email
+  compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
 # Defining the secrets needed for Environment variables of the Cloud Run Job

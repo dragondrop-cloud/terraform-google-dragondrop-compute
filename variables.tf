@@ -21,7 +21,7 @@ variable "dragondrop_engine_cloud_run_job_name" {
 variable "dragondrop_engine_container_path" {
   description = "Path to the dragondrop engine container used in the cloud run job."
   type        = string
-  default     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-engine/engine@latest"
+  default     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-engine/engine:latest"
 }
 
 variable "https_trigger_cloud_run_service_name" {

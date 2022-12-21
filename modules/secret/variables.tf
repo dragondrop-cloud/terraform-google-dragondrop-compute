@@ -13,7 +13,7 @@ variable "secret_id" {
   type        = string
 }
 
-variable "dragondrop_compute_service_account" {
-  description = "Service account granted to grant read permissions to the secret."
+variable "compute_service_account_email" {
+  description = "Service account email with locked-down permissions for accessing resources related to dragondrop compute."
   type        = string
 }
