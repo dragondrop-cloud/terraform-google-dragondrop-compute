@@ -36,16 +36,16 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
           name = module.division_to_provider.secret_id
           value_source {
             secret_key_ref {
-              name = module.division_to_provider.secret_id
-              key  = "latest"
+              secret  = module.division_to_provider.secret_id
+              version = "latest"
             }
           }
         }
 
         resources {
-          requests = {
-            memory = "1600M"
-            cpu    = "4000m"
+          limits = {
+            memory = "8Gi"
+            cpu    = "4"
           }
         }
       }

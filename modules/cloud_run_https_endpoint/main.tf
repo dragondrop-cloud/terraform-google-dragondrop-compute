@@ -8,7 +8,7 @@ resource "google_cloud_run_service" "https_job_trigger" {
 
     spec {
 
-      service_account_name = google_service_account.cloud_run_service_account.email
+      service_account_name = var.service_account_email
 
       containers {
         # This image's is open sourced and available for inspection at:
