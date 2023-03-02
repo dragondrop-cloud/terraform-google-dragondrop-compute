@@ -45,15 +45,6 @@ module "terraform_version" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "relative_directory_markdown" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "RELATIVEDIRECTORYMARKDOWN"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 module "workspace_to_directory" {
   source = "../secret"
 
@@ -211,16 +202,6 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.relative_directory_markdown.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.relative_directory_markdown.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
           name = module.workspace_to_directory.secret_id
           value_source {
             secret_key_ref {
@@ -346,7 +327,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
   }
   depends_on = [
     module.division_to_provider, module.division_cloud_credentials, module.providers,
-    module.terraform_version, module.relative_directory_markdown, module.workspace_to_directory,
+    module.terraform_version, module.workspace_to_directory,
     module.migration_history_storage, module.vcs_token, module.vcs_user, module.vcs_repo,
     module.vcs_system, module.vcs_base_branch, module.state_backend, module.terraform_cloud_organization,
     module.terraform_cloud_token, module.job_token
