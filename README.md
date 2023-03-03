@@ -37,4 +37,4 @@ the problem or open a pull request.
 ### License
 Please see [LICENSE](LICENSE) for details on this module's license.
 
-Copyright © 2022 dragondrop.cloud, Inc.
+Copyright © 2023 dragondrop.cloud, Inc.
