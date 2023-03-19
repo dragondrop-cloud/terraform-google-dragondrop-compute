@@ -1,8 +1,8 @@
-# dragondrop Self-Hosting Compute
+# terraform-aws-dragondrop-compute
 Terraform code for deploying the compute resources needed to run dragondrop.cloud within your Google Cloud environment.
 
 ## How to Use this Module
-This module defines the compute resources needed to run dragondrop within your own cloud environment.
+This module defines the compute resources needed to run dragondrop within your own GCP environment.
 
 It defines a [Cloud Run Service](https://github.com/dragondrop-cloud/cloud-run-job-http-trigger) that can
 evoke the longer running dragondrop engine living in a provisioned Cloud Run Job.
