@@ -1,5 +1,5 @@
 module "dragondrop_compute" {
-  source  = "app.terraform.io/dragondrop-cloud/dragondrop-compute/google"
+  source  = "dragondrop-cloud/dragondrop-compute/google"
   version = "0.4.3"
 
   project = "my-gcp-project"
