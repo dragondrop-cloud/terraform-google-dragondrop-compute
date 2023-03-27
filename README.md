@@ -1,6 +1,20 @@
 # terraform-aws-dragondrop-compute
 Terraform code for deploying the compute resources needed to run dragondrop.cloud within your Google Cloud environment.
 
+![GCP infrastructure diagram](./images/2023-03-27%20GCP%20Module%20Infrastructure.png)
+Cloud architecture diagram of the infrastructure created by this module.
+
+## Variables
+
+| Name                                       | Type        | Purpose                                                                                                                                           |
+|--------------------------------------------|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| _**dragondrop_engine_cloud_run_job_name**_ | string      | Name of the Cloud Run Job created by the Module which hosts the dragondrop proprietary container.                                                 |
+| _**https_trigger_cloud_run_service_name**_ | string      | Name of the Cloud Run Service created by the Module which services as an HTTPS endpoint.                                                          |
+| **_project_**                              | string      | GCP project into which resources should be deployed.                                                                                              |
+| **_region_**                               | string      | GCP region into which resources should be deployed.                                                                                               |
+| **_service_account_name_**                 | string      | Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job. |
+
+
 ## How to Use this Module
 This module defines the compute resources needed to run dragondrop within your own GCP environment.
 
