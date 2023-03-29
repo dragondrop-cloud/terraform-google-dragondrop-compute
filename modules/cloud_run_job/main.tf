@@ -140,11 +140,6 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
           }
         }
 
-        env {
-          name  = "DRAGONDROP_JOBID"
-          value = ""
-        }
-
         resources {
           limits = {
             memory = "8Gi"
