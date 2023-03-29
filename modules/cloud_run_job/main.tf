@@ -27,24 +27,6 @@ module "division_cloud_credentials" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "providers" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "PROVIDERS"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "terraform_version" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "TERRAFORMVERSION"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 module "workspace_to_directory" {
   source = "../secret"
 
@@ -54,75 +36,12 @@ module "workspace_to_directory" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "migration_history_storage" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "MIGRATIONHISTORYSTORAGE"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 module "vcs_token" {
   source = "../secret"
 
   project_name                  = var.project
   project_number                = data.google_project.project.number
   secret_id                     = "VCSTOKEN"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "vcs_user" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "VCSUSER"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "vcs_repo" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "VCSREPO"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "vcs_system" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "VCSSYSTEM"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "vcs_base_branch" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "VCSBASEBRANCH"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "state_backend" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "STATEBACKEND"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
-module "terraform_cloud_organization" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "TERRAFORMCLOUDORGANIZATION"
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
@@ -182,26 +101,6 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.providers.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.providers.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.terraform_version.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.terraform_version.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
           name = module.workspace_to_directory.secret_id
           value_source {
             secret_key_ref {
@@ -212,80 +111,10 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.migration_history_storage.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.migration_history_storage.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
           name = module.vcs_token.secret_id
           value_source {
             secret_key_ref {
               secret  = module.vcs_token.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.vcs_user.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.vcs_user.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.vcs_repo.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.vcs_repo.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.vcs_system.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.vcs_system.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.vcs_base_branch.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.vcs_base_branch.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.state_backend.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.state_backend.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.terraform_cloud_organization.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.terraform_cloud_organization.secret_id
               version = "latest"
             }
           }
@@ -311,11 +140,6 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
           }
         }
 
-        env {
-          name  = "DRAGONDROP_JOBID"
-          value = ""
-        }
-
         resources {
           limits = {
             memory = "8Gi"
@@ -326,10 +150,9 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
     }
   }
   depends_on = [
-    module.division_to_provider, module.division_cloud_credentials, module.providers,
-    module.terraform_version, module.workspace_to_directory,
-    module.migration_history_storage, module.vcs_token, module.vcs_user, module.vcs_repo,
-    module.vcs_system, module.vcs_base_branch, module.state_backend, module.terraform_cloud_organization,
+    module.division_to_provider, module.division_cloud_credentials,
+    module.workspace_to_directory,
+    module.vcs_token,
     module.terraform_cloud_token, module.job_token
   ]
 }
