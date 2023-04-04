@@ -1,3 +1,8 @@
+variable "dragondrop_https_trigger_container_path" {
+  description = "Path to the dragondrop engine container used in the cloud run service."
+  type        = string
+}
+
 variable "region" {
   description = "GCP region into which resources will be deployed."
   type        = string
