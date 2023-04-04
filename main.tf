@@ -45,8 +45,9 @@ module "cloud_run_https_endpoint" {
   project = var.project
   region  = var.region
 
-  cloud_run_max_instances              = var.cloud_run_max_instances
-  dragondrop_engine_cloud_run_job_name = var.dragondrop_engine_cloud_run_job_name
-  https_trigger_cloud_run_service_name = var.https_trigger_cloud_run_service_name
-  service_account_email                = google_service_account.cloud_run_service_account.email
+  cloud_run_max_instances                 = var.cloud_run_max_instances
+  dragondrop_https_trigger_container_path = var.dragondrop_https_trigger_container_path
+  dragondrop_engine_cloud_run_job_name    = var.dragondrop_engine_cloud_run_job_name
+  https_trigger_cloud_run_service_name    = var.https_trigger_cloud_run_service_name
+  service_account_email                   = google_service_account.cloud_run_service_account.email
 }

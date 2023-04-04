@@ -5,6 +5,12 @@ variable "dragondrop_engine_container_path" {
   default     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-engine/engine:latest"
 }
 
+variable "dragondrop_https_trigger_container_path" {
+  description = "Path to the dragondrop engine container used in the cloud run service as the https endpoint."
+  type        = string
+  default     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-https-triggers/cloud-run-service:latest"
+}
+
 variable "cloud_run_max_instances" {
   description = "Maximum number of Cloud Run instances to be scaled up to handle incoming requests. This value should be set to at most 2."
   type        = string

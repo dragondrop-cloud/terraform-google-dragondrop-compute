@@ -13,7 +13,7 @@ resource "google_cloud_run_service" "https_job_trigger" {
       containers {
         # This image's is open sourced and available for inspection at:
         # https://github.com/dragondrop-cloud/cloud-run-job-http-trigger
-        image = "us-east4-docker.pkg.dev/dragondrop-dev/dragondrop-https-triggers/cloud-run-service:latest"
+        image = var.dragondrop_https_trigger_container_path
 
         env {
           name  = "JOB_NAME"
