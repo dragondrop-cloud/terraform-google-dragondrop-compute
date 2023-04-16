@@ -63,6 +63,16 @@ module "job_token" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
+module "infracost_api_token" {
+  source = "../secret"
+
+  project_name                  = var.project
+  project_number                = data.google_project.project.number
+  secret_id                     = "INFRACOSTAPITOKEN"
+  compute_service_account_email = var.dragondrop_compute_service_account_email
+}
+
+
 # Defining the secrets needed for Environment variables of the Cloud Run Job
 resource "google_cloud_run_v2_job" "dragondrop-engine" {
   provider     = google
