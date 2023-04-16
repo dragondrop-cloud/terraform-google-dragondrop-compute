@@ -150,6 +150,16 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
           }
         }
 
+        env {
+          name = module.infracost_api_token.secret_id
+          value_source {
+            secret_key_ref {
+              secret  = module.infracost_api_token.secret_id
+              version = "latest"
+            }
+          }
+        }
+
         resources {
           limits = {
             memory = "8Gi"
