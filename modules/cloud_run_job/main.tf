@@ -18,15 +18,6 @@ module "division_cloud_credentials" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "infracost_token" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "INFRACOSTAPITOKEN"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 module "vcs_token" {
   source = "../secret"
 
@@ -122,16 +113,6 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.infracost_token.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.infracost_token.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
           name = module.infracost_api_token.secret_id
           value_source {
             secret_key_ref {
@@ -151,7 +132,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
     }
   }
   depends_on = [
-    module.division_cloud_credentials, module.infracost_token, module.vcs_token,
+    module.division_cloud_credentials, module.infracost_api_token, module.vcs_token,
     module.terraform_cloud_token, module.job_token
   ]
 }
