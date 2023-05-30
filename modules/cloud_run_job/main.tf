@@ -9,15 +9,6 @@ data "google_project" "project" {
 }
 
 # Create the required environment variables
-module "division_to_provider" {
-  source = "../secret"
-
-  project_name                  = var.project
-  project_number                = data.google_project.project.number
-  secret_id                     = "DIVISIONTOPROVIDER"
-  compute_service_account_email = var.dragondrop_compute_service_account_email
-}
-
 module "division_cloud_credentials" {
   source = "../secret"
 
@@ -27,12 +18,12 @@ module "division_cloud_credentials" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "workspace_to_directory" {
+module "infracost_token" {
   source = "../secret"
 
   project_name                  = var.project
   project_number                = data.google_project.project.number
-  secret_id                     = "WORKSPACETODIRECTORY"
+  secret_id                     = "INFRACOSTAPITOKEN"
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
@@ -81,30 +72,10 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         image = var.dragondrop_engine_container_path
 
         env {
-          name = module.division_to_provider.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.division_to_provider.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
           name = module.division_cloud_credentials.secret_id
           value_source {
             secret_key_ref {
               secret  = module.division_cloud_credentials.secret_id
-              version = "latest"
-            }
-          }
-        }
-
-        env {
-          name = module.workspace_to_directory.secret_id
-          value_source {
-            secret_key_ref {
-              secret  = module.workspace_to_directory.secret_id
               version = "latest"
             }
           }
@@ -140,6 +111,16 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
           }
         }
 
+        env {
+          name = module.infracost_token.secret_id
+          value_source {
+            secret_key_ref {
+              secret  = module.infracost_token.secret_id
+              version = "latest"
+            }
+          }
+        }
+
         resources {
           limits = {
             memory = "8Gi"
@@ -150,9 +131,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
     }
   }
   depends_on = [
-    module.division_to_provider, module.division_cloud_credentials,
-    module.workspace_to_directory,
-    module.vcs_token,
+    module.division_cloud_credentials, module.infracost_token, module.vcs_token,
     module.terraform_cloud_token, module.job_token
   ]
 }
