@@ -18,8 +18,8 @@ variable "cloud_run_max_instances" {
   type        = string
 }
 
-variable "dragondrop_engine_cloud_run_job_name" {
-  description = "Name of the Cloud Run Job that hosts the dragondrop compute engine."
+variable "cloud_concierge_cloud_run_job_name" {
+  description = "Name of the Cloud Run Job that hosts the cloud-concierge."
   type        = string
 }
 
