@@ -36,12 +36,12 @@ module "terraform_cloud_token" {
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
-module "job_token" {
+module "org_token" {
   source = "../secret"
 
   project_name                  = var.project
   project_number                = data.google_project.project.number
-  secret_id                     = "JOBTOKEN"
+  secret_id                     = "ORGTOKEN"
   compute_service_account_email = var.dragondrop_compute_service_account_email
 }
 
@@ -70,7 +70,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
       service_account = var.dragondrop_compute_service_account_email
 
       containers {
-        image = var.dragondrop_engine_container_path
+        image = var.cloud_concierge_container_path
 
         env {
           name = module.division_cloud_credentials.secret_id
@@ -103,10 +103,10 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
         }
 
         env {
-          name = module.job_token.secret_id
+          name = module.org_token.secret_id
           value_source {
             secret_key_ref {
-              secret  = module.job_token.secret_id
+              secret  = module.org_token.secret_id
               version = "latest"
             }
           }
@@ -133,7 +133,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
   }
   depends_on = [
     module.division_cloud_credentials, module.infracost_api_token, module.vcs_token,
-    module.terraform_cloud_token, module.job_token
+    module.terraform_cloud_token, module.org_token
   ]
 }
 

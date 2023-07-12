@@ -1,9 +1,9 @@
 resource "google_secret_manager_secret" "secret" {
   project   = var.project_name
-  secret_id = "DRAGONDROP_${var.secret_id}"
+  secret_id = "CLOUDCONCIERGE_${var.secret_id}"
 
   labels = {
-    label = "dragondrop-engine"
+    label = "cloud-concierge"
   }
 
   replication {

@@ -34,9 +34,9 @@ module "cloud_run_job" {
 
   project                                  = var.project
   region                                   = var.region
-  cloud_run_job_name                       = var.dragondrop_engine_cloud_run_job_name
+  cloud_run_job_name                       = var.cloud_concierge_cloud_run_job_name
   dragondrop_compute_service_account_email = google_service_account.cloud_run_service_account.email
-  dragondrop_engine_container_path         = var.dragondrop_engine_container_path
+  cloud_concierge_container_path           = var.cloud_concierge_container_path
 }
 
 module "cloud_run_https_endpoint" {
@@ -47,7 +47,7 @@ module "cloud_run_https_endpoint" {
 
   cloud_run_max_instances                 = var.cloud_run_max_instances
   dragondrop_https_trigger_container_path = var.dragondrop_https_trigger_container_path
-  dragondrop_engine_cloud_run_job_name    = var.dragondrop_engine_cloud_run_job_name
+  cloud_concierge_cloud_run_job_name      = var.cloud_concierge_cloud_run_job_name
   https_trigger_cloud_run_service_name    = var.https_trigger_cloud_run_service_name
   service_account_email                   = google_service_account.cloud_run_service_account.email
 }

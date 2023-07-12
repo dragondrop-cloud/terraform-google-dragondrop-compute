@@ -17,7 +17,7 @@ resource "google_cloud_run_service" "https_job_trigger" {
 
         env {
           name  = "JOB_NAME"
-          value = var.dragondrop_engine_cloud_run_job_name
+          value = var.cloud_concierge_cloud_run_job_name
         }
 
         env {

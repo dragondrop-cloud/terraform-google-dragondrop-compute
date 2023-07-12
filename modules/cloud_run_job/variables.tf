@@ -8,8 +8,8 @@ variable "region" {
   type        = string
 }
 
-variable "dragondrop_engine_container_path" {
-  description = "Path to the dragondrop engine container used in the cloud run job."
+variable "cloud_concierge_container_path" {
+  description = "Path to the cloud-concierge engine container used in the cloud run job."
   type        = string
 }
 

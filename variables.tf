@@ -1,8 +1,8 @@
 # Variables with default values that most users will not want to update.
-variable "dragondrop_engine_container_path" {
-  description = "Path to the dragondrop engine container used in the cloud run job."
+variable "cloud_concierge_container_path" {
+  description = "Path to the cloud-concierge engine container used in the cloud run job."
   type        = string
-  default     = "us-east4-docker.pkg.dev/dragondrop-prod/dragondrop-engine/engine:latest"
+  default     = "docker.io/dragondropcloud/cloud-concierge:latest"
 }
 
 variable "dragondrop_https_trigger_container_path" {
@@ -28,8 +28,8 @@ variable "project" {
   type        = string
 }
 
-variable "dragondrop_engine_cloud_run_job_name" {
-  description = "Name of the Cloud Run Job that hosts the dragondrop compute engine."
+variable "cloud_concierge_cloud_run_job_name" {
+  description = "Name of the Cloud Run Job that hosts the cloud-concierge compute engine."
   type        = string
 }
 
