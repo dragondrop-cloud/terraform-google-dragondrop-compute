@@ -31,7 +31,7 @@ resource "google_storage_bucket_iam_member" "bucket_1" {
 resource "google_service_account_iam_member" "cloud_run_service_sa_user" {
   service_account_id = google_service_account.cloud_run_job_service_account.id
   role               = "roles/iam.serviceAccountUser"
-  member             = "serviceAccount:${google_service_account.cloud_run_job_service_account.email}"
+  member             = "serviceAccount:${var.cloud_run_service_sa_email}"
 }
 
 # Create the required environment variables
