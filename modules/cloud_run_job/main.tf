@@ -17,14 +17,14 @@ resource "google_service_account" "cloud_run_job_service_account" {
 
 resource "google_project_iam_member" "cloud_environment_reader" {
   project = var.project
-  role    = "roles/Viewer"
+  role    = "roles/viewer"
   member  = "serviceAccount:${google_service_account.cloud_run_job_service_account.email}"
 }
 
 resource "google_storage_bucket_iam_member" "bucket_1" {
-  count       = var.gcs_state_bucket != "None" ? 1 : 0
-  bucket      = var.gcs_state_bucket
-  role = "roles/storage.objectViewer"
+  count  = var.gcs_state_bucket != "None" ? 1 : 0
+  bucket = var.gcs_state_bucket
+  role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.cloud_run_job_service_account.email}"
 }
 

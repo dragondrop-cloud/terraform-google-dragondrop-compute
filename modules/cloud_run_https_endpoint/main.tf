@@ -23,9 +23,9 @@ data "google_iam_policy" "admin" {
 }
 
 resource "google_cloud_run_v2_job_iam_policy" "policy" {
-  project = var.project
-  location = var.region
-  name = var.cloud_concierge_cloud_run_job_name
+  project     = var.project
+  location    = var.region
+  name        = var.cloud_concierge_cloud_run_job_name
   policy_data = data.google_iam_policy.admin.policy_data
 }
 
