@@ -18,6 +18,11 @@ variable "cloud_run_job_name" {
   type        = string
 }
 
+variable "cloud_run_service_sa_email" {
+  description = "Email of the service account used by the cloud run service that will update and trigger the cloud run job."
+  type        = string
+}
+
 variable "gcs_state_bucket" {
   description = "Name of the GCS bucket used to store the state of the terraform deployment. Optional to specify."
   type        = string
