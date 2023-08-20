@@ -6,13 +6,14 @@ Cloud architecture diagram of the infrastructure created by this module.
 
 ## Variables
 
-| Name                                       | Type        | Purpose                                                                                                                                           |
-|--------------------------------------------|-------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| _**dragondrop_engine_cloud_run_job_name**_ | string      | Name of the Cloud Run Job created by the Module which hosts the dragondrop proprietary container.                                                 |
-| _**https_trigger_cloud_run_service_name**_ | string      | Name of the Cloud Run Service created by the Module which services as an HTTPS endpoint.                                                          |
-| **_project_**                              | string      | GCP project into which resources should be deployed.                                                                                              |
-| **_region_**                               | string      | GCP region into which resources should be deployed.                                                                                               |
-| **_service_account_name_**                 | string      | Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job. |
+| Name                                       | Type   | Purpose                                                                                                                                                  |
+|--------------------------------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| _**dragondrop_engine_cloud_run_job_name**_ | string | Name of the Cloud Run Job created by the Module which hosts the OSS cloud-concierge container.                                                           |
+| _**https_trigger_cloud_run_service_name**_ | string | Name of the Cloud Run Service created by the Module which serves as an HTTPS endpoint.                                                                   |
+| **_project_**                              | string | GCP project into which resources should be deployed.                                                                                                     |
+| **_region_**                               | string | GCP region into which resources should be deployed.                                                                                                      |
+| **_service_account_name_**                 | string | Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job. |
+| **_gcs_state_bucket_**                     | string | Optional name of the GCS storage bucket used for storing Terraform state backend files read by the cloud-concierge container.                            |
 
 
 ## How to Use this Module
@@ -24,20 +25,25 @@ evoke the longer running dragondrop engine living in a provisioned Cloud Run Job
 The url for this Cloud Run Service is output and should be passed to a dragondrop [Job](https://docs.dragondrop.cloud/product-docs/getting-started/creating-a-job)
 definition as that Job's "HTTPS Url".
 
-The Cloud Run Job hosts dragondrop's proprietary container. All environment variables that need to be configured are references
-to secrets within Google Secret Manager, and can be customized like any other secret.
+The Cloud Run Job hosts the [cloud-concierge](https://github.com/dragondrop-cloud/cloud-concierge) container. All environment
+variables are set by the dragondrop platform, except for a VCS personal access token stored in Google Secrets manager and an optional
+Terraform Cloud organization token.
 
 ### Security When Using This Module
-This module creates a new IAM role, "dragondrop HTTPS Trigger Role" which has the minimum permissions needed to evoke
-Cloud Run Jobs. This role is assigned to a new service account, and that service account is the service account used by both the
-Cloud Run Service and Cloud Run Job provisioned by this module.
+This module creates two IAM roles.
 
-Lastly, that service account is granted Secret Accessor privileges on only the secrets referenced by the Cloud Run Job as
-environment variables.
+1) "dragondrop HTTPS Trigger Role" which has the minimum permissions needed to evoke
+Cloud Run Jobs. This role is assigned to a new service account, and that service account is the service account used by both the
+Cloud Run Service.
+
+2) "cloud-concierge-execution-role" is granted Secret Accessor privileges on only the secrets referenced by the Cloud Run Job as
+environment variables, read-only access to the cloud environment, and optionally, read-only access to the GCS bucket used for Terraform state.
+This role is used by the Cloud Run Job that hosts the cloud-concierge container.
 
 ## What is dragondrop.cloud?
-[dragondrop.cloud](https://dragondrop.cloud) is a provider of IAC automation solutions that are self-hosted
-within customer's cloud environment. For more information or to schedule a demo, please visit our website.
+[dragondrop.cloud](https://dragondrop.cloud) is a provider of IAC automation solutions, of which the flagship is the OSS
+[cloud-concierge](https://github.com/dragondrop-cloud/cloud-concierge) container.
+For more information or to schedule a demo, please visit our website.
 
 ## What's a Module?
 A Module is a reusable, best-practices definition for the deployment of cloud infrastructure. 
