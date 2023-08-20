@@ -17,3 +17,6 @@ override.tf.json
 
 .env
 .idea/
+# Ignore all terraform files created for running "terraform validate"
+.terraform.lock.hcl
+.terraform

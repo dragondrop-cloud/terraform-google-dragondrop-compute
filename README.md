@@ -8,12 +8,11 @@ Cloud architecture diagram of the infrastructure created by this module.
 
 | Name                                       | Type   | Purpose                                                                                                                                                  |
 |--------------------------------------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| _**dragondrop_engine_cloud_run_job_name**_ | string | Name of the Cloud Run Job created by the Module which hosts the OSS cloud-concierge container.                                                           |
+| _**cloud_concierge_cloud_run_job_name**_   | string | Name of the Cloud Run Job created by the Module which hosts the OSS cloud-concierge container.                                                           |
+| **_gcs_state_bucket_**                     | string | Optional name of the GCS storage bucket used for storing Terraform state backend files read by the cloud-concierge container.                            |
 | _**https_trigger_cloud_run_service_name**_ | string | Name of the Cloud Run Service created by the Module which serves as an HTTPS endpoint.                                                                   |
 | **_project_**                              | string | GCP project into which resources should be deployed.                                                                                                     |
 | **_region_**                               | string | GCP region into which resources should be deployed.                                                                                                      |
-| **_service_account_name_**                 | string | Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job. |
-| **_gcs_state_bucket_**                     | string | Optional name of the GCS storage bucket used for storing Terraform state backend files read by the cloud-concierge container.                            |
 
 
 ## How to Use this Module
@@ -33,11 +32,11 @@ Terraform Cloud organization token.
 This module creates two IAM roles.
 
 1) "dragondrop HTTPS Trigger Role" which has the minimum permissions needed to evoke
-Cloud Run Jobs. This role is assigned to a new service account, and that service account is the service account used by both the
-Cloud Run Service.
+only the Cloud Run Job hosting the cloud-concierge container. This role is assigned to a new service account
+used by the created Cloud Run Service.
 
 2) "cloud-concierge-execution-role" is granted Secret Accessor privileges on only the secrets referenced by the Cloud Run Job as
-environment variables, read-only access to the cloud environment, and optionally, read-only access to the GCS bucket used for Terraform state.
+environment variables, read-only access to the cloud environment, and optionally, read-only access to the GCS bucket used for Terraform state management.
 This role is used by the Cloud Run Job that hosts the cloud-concierge container.
 
 ## What is dragondrop.cloud?
