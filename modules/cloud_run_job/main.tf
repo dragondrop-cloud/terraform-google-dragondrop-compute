@@ -28,6 +28,12 @@ resource "google_storage_bucket_iam_member" "bucket_1" {
   member = "serviceAccount:${google_service_account.cloud_run_job_service_account.email}"
 }
 
+resource "google_service_account_iam_member" "cloud_run_service_sa_user" {
+  service_account_id = google_service_account.cloud_run_job_service_account.id
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.cloud_run_job_service_account.email}"
+}
+
 # Create the required environment variables
 module "vcs_token" {
   source = "../secret"
@@ -59,6 +65,7 @@ resource "google_cloud_run_v2_job" "dragondrop-engine" {
     task_count = 1
 
     template {
+      max_retries     = 0
       service_account = google_service_account.cloud_run_job_service_account.email
 
       containers {

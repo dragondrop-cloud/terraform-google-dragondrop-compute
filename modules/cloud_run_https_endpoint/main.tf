@@ -10,7 +10,7 @@ resource "google_project_iam_custom_role" "dragondrop-https-trigger-role" {
   role_id     = "dragondropHTTPSTriggerRole"
   title       = "dragondrop HTTPS Trigger Role"
   description = "Role for the dragondrop https trigger to update and invoke Cloud Run Jobs."
-  permissions = ["iam.serviceAccounts.actAs", "run.executions.get", "run.jobs.get", "run.jobs.run", "run.jobs.update"]
+  permissions = ["run.executions.get", "run.jobs.get", "run.jobs.run", "run.jobs.update"]
 }
 
 data "google_iam_policy" "admin" {
