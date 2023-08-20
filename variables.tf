@@ -33,12 +33,13 @@ variable "cloud_concierge_cloud_run_job_name" {
   type        = string
 }
 
-variable "https_trigger_cloud_run_service_name" {
-  description = "Name of the https trigger Cloud Run service that will trigger the dragondrop 'engine' hosted in a cloud run job."
+variable "gcs_state_bucket" {
+  description = "Name of the GCS bucket used to store the state of the terraform deployment. Optional to specify."
   type        = string
+  default     = "None"
 }
 
-variable "service_account_name" {
-  description = "Name of the service account with exclusively Cloud Run Job invocation privileges that serves as the service account for the HTTPS trigger Cloud Run Job."
+variable "https_trigger_cloud_run_service_name" {
+  description = "Name of the https trigger Cloud Run service that will trigger the dragondrop 'engine' hosted in a cloud run job."
   type        = string
 }

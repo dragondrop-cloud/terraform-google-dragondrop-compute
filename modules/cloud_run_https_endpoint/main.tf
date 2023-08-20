@@ -1,3 +1,35 @@
+// Cloud Run Service Account
+resource "google_service_account" "cloud_run_service_account" {
+  account_id  = "dd-cloud-run-https-trigger"
+  description = "Service accounts used by the dragondrop.cloud Cloud Run service to programmatically evoke cloud-concierge instances."
+  project     = var.project
+}
+
+resource "google_project_iam_custom_role" "dragondrop-https-trigger-role" {
+  project     = var.project
+  role_id     = "dragondropHTTPSTriggerRole"
+  title       = "dragondrop HTTPS Trigger Role"
+  description = "Role for the dragondrop https trigger to update and invoke Cloud Run Jobs."
+  permissions = ["iam.serviceAccounts.actAs", "run.executions.get", "run.jobs.get", "run.jobs.run", "run.jobs.update"]
+}
+
+data "google_iam_policy" "admin" {
+  binding {
+    role = google_project_iam_custom_role.dragondrop-https-trigger-role.id
+    members = [
+      "serviceAccount:${google_service_account.cloud_run_service_account.email}"
+    ]
+  }
+}
+
+resource "google_cloud_run_v2_job_iam_policy" "policy" {
+  project = var.project
+  location = var.region
+  name = var.cloud_concierge_cloud_run_job_name
+  policy_data = data.google_iam_policy.admin.policy_data
+}
+
+# Creating the actual cloud run service resource
 resource "google_cloud_run_service" "https_job_trigger" {
   name                       = var.https_trigger_cloud_run_service_name
   location                   = var.region
@@ -8,7 +40,7 @@ resource "google_cloud_run_service" "https_job_trigger" {
 
     spec {
 
-      service_account_name = var.service_account_email
+      service_account_name = google_service_account.cloud_run_service_account.email
 
       containers {
         # This image's is open sourced and available for inspection at:
